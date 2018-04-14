@@ -1,6 +1,6 @@
 var n=1;
 initStatus(n);
-setInterval(function(e){
+var timer=setInterval(function(e){
     makeLeaveStatus(getImageItem(n))
     .one("transitionend",function(e){
         makeEnterStatus($(e.currentTarget));
@@ -9,6 +9,22 @@ setInterval(function(e){
     n+=1;
     n=changeN(n);
 },3000)
+
+document.addEventListener("visibilitychange",function(e){
+   if(document.hidden){
+      clearInterval(timer);
+   }else{
+    timer=setInterval(function(e){
+        makeLeaveStatus(getImageItem(n))
+        .one("transitionend",function(e){
+            makeEnterStatus($(e.currentTarget));
+        });
+        makeCurrentStatus(getImageItem(n+1));
+        n+=1;
+        n=changeN(n);
+    },3000)
+   }
+});
 
 function initStatus(n){
     getImageItem(n).addClass("current")
